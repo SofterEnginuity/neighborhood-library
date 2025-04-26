@@ -2,17 +2,18 @@ package com.pluralsight;
 
 public class Book {
     private int id;
+    private String isbn;
     private String title;
-    private String author;
     private boolean isCheckedOut;
     private String checkedOutTo;
 
-    public Book(int id, String title, String author, boolean isCheckedOut, String checkedOutTo) {
+
+    public Book(int id, String isbn, String title) {
         this.id = id;
+        this.isbn = isbn;
         this.title = title;
-        this.author = author;
-        this.isCheckedOut = isCheckedOut;
-        this.checkedOutTo = checkedOutTo;
+        this.isCheckedOut = false;
+        this.checkedOutTo = "";
     }
 
     public int getId() {
@@ -31,12 +32,12 @@ public class Book {
         this.title = title;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getIsbn() {
+        return isbn;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
     public boolean isCheckedOut() {
@@ -44,14 +45,15 @@ public class Book {
     }
 
 
-
     public void setCheckedOut(boolean checkedOut) {
 
         this.isCheckedOut = checkedOut;
     }
+
     public String getCheckedOutTo() {
         return checkedOutTo;
     }
+
     public void setCheckedOutTo(String checkedOutTo) {
         this.checkedOutTo = checkedOutTo;
     }
@@ -59,15 +61,24 @@ public class Book {
 //
 //    }
 
+    public void checkOut(String name) {
+        isCheckedOut = true;
+        checkedOutTo = name;
+    }
+
+    public void checkIn() {
+        isCheckedOut = false;
+        checkedOutTo = "";
+    }
+
     @Override
     public String toString() {
-        return "Product{" +
-//                "id=" + id +
-                ", Title:'" + title + '\'' +
-                ", Author:" + author + '\'' +
-                ", checkedOut:" + isCheckedOut + '\'' +
-                ", Checked out to: '" + checkedOutTo + '\'' +
-//                ", Expected return date:" + returnDate + '\'' +
+        return "Book{" +
+                "id=" + id +
+                ", isbn='" + isbn + '\'' +
+                ", title='" + title + '\'' +
+                ", isCheckedOut=" + isCheckedOut +
+                ", checkedOutTo='" + checkedOutTo + '\'' +
                 '}';
     }
 }

@@ -16,75 +16,26 @@ public class neighborhoodLibrary {
 
         while (userSelection != 6) {
         System.out.println("What do you want to do?");
-        System.out.println("1- List all books");
-        System.out.println("2- Search by Title");
-        System.out.println("3- Search by Author");
-        System.out.println("4- Show all books on hand");
-        System.out.println("5- Return a book");
-        System.out.println("6- Exit the application.");
+        System.out.println("1- Show all available books");
+        System.out.println("2- Show books that are checked out");
+        System.out.println("3- Exit the application.");
 //
             userSelection = myScanner.nextInt();
             myScanner.nextLine();
 
             switch(userSelection){
-                case 1:
-                    System.out.println("We have the following books at our library:");
-                    for (Book b : books) {
-                        System.out.println("ID: " + b.getId() + ", Title: " + b.getTitle() + ", Author: " + b.getAuthor());
-                    }
-                    System.exit(0);
 
-                case 2:
-                    System.out.println("Please enter the title of the book you'd like to search for.");
-                    String userTitle = myScanner.nextLine();
-                    boolean titleFound = false;
-                    for (Book b : books) {
-                        if (b.getTitle().equalsIgnoreCase(userTitle)) {
-                            System.out.println("We do have " + b.getTitle() + " in our library.");
-                            titleFound = true;
-                            break;  // Exit loop after finding the book
-                        }
-                    }if(!titleFound){
-                            System.out.println("We do not have " + userTitle + " in our inventory at this time.");
-                    }
-                    System.exit(0);
-
-
-                case 3:
-                    System.out.println("Please enter the author of the book you'd like to search for.");
-                    String userAuthor = myScanner.nextLine();
-                    boolean authorFound = false;
-                    for (Book b : books) {
-                        if (b.getAuthor().equalsIgnoreCase(userAuthor)) {
-                            System.out.println("We do have at least 1 book by " + b.getAuthor() + " in our library.");
-                            authorFound = true;
-                            break;  // Exit loop after finding the book
-                        }
-                    }if(!authorFound){
-                    System.out.println("We do not have a book written by " + userAuthor + " in our inventory at this time.");
-                }
-                    System.exit(0);
-
-                case 4:
-                    System.out.println("Here is a list of all books that we have on hand currently:");
-                    boolean available = false;
-
+                case 1: {
+                    System.out.println("We currently have the following books available:");
                     for (Book b : books) {
                         if (!b.isCheckedOut()) {
-                            System.out.println("ID: " + b.getId() + ", Title: " + b.getTitle() + ", Author: " + b.getAuthor());
-                            available = true;
+                            System.out.println("ID: " + b.getId() + " | ISBN: " + b.getIsbn() + " | Title: " + b.getTitle());
                         }
                     }
 
-                    if (!available) {
-                        System.out.println("No books are currently available.");
-                        break;
-                    }
-
-                    System.out.println();
                     System.out.print("Please enter the ID of the book you'd like to check out, or 0 to return to the main menu: ");
                     int bookSelection = myScanner.nextInt();
-                    myScanner.nextLine(); // Consume leftover newline
+                    myScanner.nextLine();
 
                     if (bookSelection == 0) {
                         break;
@@ -99,77 +50,113 @@ public class neighborhoodLibrary {
                     }
 
                     if (selectedBook != null) {
-                        myScanner.nextLine();
-                        System.out.print("Please enter your name to check out the book: ");
-                        String userName = myScanner.nextLine();
-                        selectedBook.setCheckedOut(true);
-                        selectedBook.setCheckedOutTo(userName);
-                        System.out.println(userName + ", you have successfully checked out \"" + selectedBook.getTitle() + "\". Enjoy!");
+                        System.out.println("What would you like to do with this book?");
+                        System.out.println("C - Checkout");
+                        System.out.println("X - Exit and return to the main menu.");
+                        String readyToCheckout = myScanner.nextLine();
+
+                        if (readyToCheckout.equalsIgnoreCase("c")) {
+                            System.out.print("Please enter your name to check out the book: ");
+                            String name = myScanner.nextLine();
+                            selectedBook.setCheckedOutTo(name);
+                            selectedBook.setCheckedOut(true);
+                            System.out.println(name + ", you have successfully checked out \"" + selectedBook.getTitle() + "\". Enjoy!");
+                        } else {
+                            System.out.println("Returning to main menu...");
+                        }
                     } else {
                         System.out.println("Invalid selection or book already checked out.");
                     }
-
                     break;
+                }
 
 
-                case 5:
-                    System.out.println("Please enter your name to return a book.");
-                    String userNameReturn = myScanner.nextLine();
+//                    System.exit(0);
 
 
-                    boolean hasBooks = false;
+
+
+                case 2: {
+                    Book selectedBook = null; // Now scoped ONLY to case 2
+                    boolean hasCheckedOutBooks = false;
+
+
+
                     for (Book b : books) {
-                        if (b.isCheckedOut() && b.getCheckedOutTo().equalsIgnoreCase(userNameReturn)) {
-                            System.out.println("ID: " + b.getId() + ", Title: " + b.getTitle() + ", Author: " + b.getAuthor());
-                            hasBooks = true;
+                        if (b.isCheckedOut()) {
+                            System.out.println("We have the following books, but they are currently checked out:");
+                            System.out.println("ID: " + b.getId() + " | ISBN: " + b.getIsbn() + " | Title: " + b.getTitle() + " | Checked out to: " + b.getCheckedOutTo());
+
+                            hasCheckedOutBooks = true;
                         }
                     }
 
-                    if (!hasBooks) {
-                        System.out.println("No books are currently checked out under the name \"" + userNameReturn + "\".");
+                    if (!hasCheckedOutBooks) {
+                        System.out.println("No books are currently checked out.");
                         break;
                     }
 
-                    System.out.print("Please enter the ID of the book you'd like to return: ");
-                    int returnBookId = myScanner.nextInt();
-                    myScanner.nextLine(); // consume newline
+                    System.out.print("Please enter the ID of the book you'd like to return, or 0 to go back: ");
+                    int bookSelection = myScanner.nextInt();
+                    myScanner.nextLine();
 
-                    boolean foundAndReturned = false;
+                    if (bookSelection == 0) {
+                        break;
+                    }
+
 
                     for (Book b : books) {
-                        if (b.getId() == returnBookId && b.isCheckedOut() && b.getCheckedOutTo().equalsIgnoreCase(userNameReturn)) {
-                            b.setCheckedOut(false);
-                            b.setCheckedOutTo(""); // Clear the name
-                            System.out.println("Thank you, \"" + b.getTitle() + "\" has been successfully returned!");
-                            foundAndReturned = true;
+                        if (b.getId() == bookSelection && b.isCheckedOut()) {
+                            selectedBook = b; // Assign the book to selectedBook
                             break;
                         }
                     }
 
-                    if (!foundAndReturned) {
-                        System.out.println("Sorry, we couldn’t find a book with that ID checked out under your name.");
-                    }
+                    if (selectedBook != null) {
+                        System.out.println("What would you like to do with this book?");
+                        System.out.println("C - Check it back into inventory.");
+                        System.out.println("X - Exit and return to the main menu.");
 
-                case 6:
+                        String readyToReturn = myScanner.nextLine();
+
+                        if (readyToReturn.equalsIgnoreCase("c")) {
+                            System.out.print("Please confirm your name to return the book: ");
+                            String name = myScanner.nextLine();
+
+                            if (selectedBook.getCheckedOutTo() != null && selectedBook.getCheckedOutTo().equalsIgnoreCase(name)) {
+                                selectedBook.setCheckedOut(false);
+                                selectedBook.setCheckedOutTo("");
+                                System.out.println("Thank you, " + name + "! \"" + selectedBook.getTitle() + "\" has been returned.");
+                            } else {
+                                System.out.println("That name does not match our records. Book not returned.");
+                            }
+                        } else {
+                            System.out.println("Returning to main menu...");
+                        }
+                    } else {
+                        System.out.println("Invalid selection or book is not currently checked out.");
+                    }
+                    break;
+}
+
+
+                case 3:
                     System.out.println("Exiting the program. See you soon!");
                     return;
                 default:
                     System.out.println("Please make a valid selection.");
             }
 
-
-
         }
 //        Scanner.close();
     }
 
-    // Define getBooks OUTSIDE of main()
     public static ArrayList<Book> getBooks() {
-        inventory.add(new Book(1, "Dune", "Frank Herbert", false, ""));
-        inventory.add(new Book(2, "Where the sidewalk ends", "Shell Silverstein", true, "Alice"));
-        inventory.add(new Book(3, "A Child called It", "Dave Pelzer", false, "Alice"));
-        inventory.add(new Book(4, "Junie B Jones", "Barbara Park", true, "Alice"));
-        inventory.add(new Book(5, "Of Mice and Men", "John Steinbeck", false, "Alice"));
+        inventory.add(new Book(1, "25468-349507", "Dune"));
+        inventory.add(new Book(2, "59035-395879", "Where the sidewalk ends"));
+        inventory.add(new Book(3, "94639-349865", "A Child called It"));
+        inventory.add(new Book(4, "45968-304563", "Junie B Jones"));
+        inventory.add(new Book(5, "20968-349583", "Of Mice and Men"));
         return inventory;
     }
 
@@ -179,3 +166,5 @@ public class neighborhoodLibrary {
         }
     }
 }
+
+
