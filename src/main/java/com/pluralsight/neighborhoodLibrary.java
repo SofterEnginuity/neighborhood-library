@@ -5,11 +5,13 @@ import java.util.Scanner;
 
 public class neighborhoodLibrary {
 
-    public static ArrayList<Book> inventory = new ArrayList<>();
+    public static Book[] inventory = new Book[5];  // Array to hold 5 books
+//    public static ArrayList<Book> inventory = new ArrayList<>();
 
     public static void main(String[] args) {
 
-        ArrayList<Book> books = getBooks();
+        Book[] books = getBooks();
+//        ArrayList<Book> books = getBooks();
 
         Scanner myScanner = new Scanner(System.in);
         int userSelection = 0;
@@ -151,14 +153,15 @@ public class neighborhoodLibrary {
 //        Scanner.close();
     }
 
-    public static ArrayList<Book> getBooks() {
-        inventory.add(new Book(1, "25468-349507", "Dune"));
-        inventory.add(new Book(2, "59035-395879", "Where the sidewalk ends"));
-        inventory.add(new Book(3, "94639-349865", "A Child called It"));
-        inventory.add(new Book(4, "45968-304563", "Junie B Jones"));
-        inventory.add(new Book(5, "20968-349583", "Of Mice and Men"));
+    public static Book[] getBooks() {
+        inventory[0] = new Book(1, "25468-349507", "Dune");
+        inventory[1] = new Book(2, "59035-395879", "Where the sidewalk ends");
+        inventory[2] = new Book(3, "94639-349865", "A Child called It");
+        inventory[3] = new Book(4, "45968-304563", "Junie B Jones");
+        inventory[4] = new Book(5, "20968-349583", "Of Mice and Men");
         return inventory;
     }
+
 
     private static void fullInventory(ArrayList<Book> inventory) {
         for (Book book : inventory) {
